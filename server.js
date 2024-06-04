@@ -1,8 +1,11 @@
 // Here is where we import modules
-// We begin by loading Express
-const express = require("express"); // require express package
+
 const dotenv = require("dotenv"); // require .env package
 dotenv.config(); // loads the environment variables from .env file
+// it’s important that these two lines of code are at the top of this file - it ensures that the environment variables are available everywhere across your application.
+
+// We begin by loading Express
+const express = require("express"); // require express package
 const mongoose = require("mongoose"); // require mongoose package
 
 const app = express();
