@@ -1,0 +1,45 @@
+<!-- views/fruits/index.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fruits Index</title>
+  </head>
+
+  <body>
+      <h1>All Fruits</h1>
+      <ul>
+          <% fruits.forEach(fruit => { %>
+            <li>
+                <a href="/fruits/<%= fruit._id %>"> <%= fruit.name %> </a>
+            </li>
+            <% }); %>
+        </ul>
+        <a href="/fruits/new">Add New Fruit</a>
+  </body>
+</html>
+
+<!-- 
+  In our previous step, we used res.render() to pass the fruits data from our database to the EJS file. By passing { fruits: allFruits }, we made the allFruits array accessible in our EJS file as a variable named fruits.
+
+We can list our fruits in a simple, bulleted list format using an unordered list <ul>. This is done by looping over the fruits array and dynamically generating an <li> for each fruit’s name:
+
+a href creates a link and then you can direct it on where to go
+
+To make each fruit name a clickable link, we’ll wrap the <%= fruit.name %> with an <a> tag. The href attribute of each link will point to the show route of the corresponding fruit. We’ll use the fruit’s ID to build this URL.
+
+Utilizing _id will give us the id that we need. Now we can make the adjustment to the <a> tag and add a dynamic href
+
+
+
+
+
+
+
+
+
+  
+
+ -->
