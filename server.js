@@ -19,9 +19,16 @@ mongoose.connection.on("connected", () => {
 // This is a Mongoose event listener that runs the supplied callback function once we have connected to a database. In the callback function, we log the name of the database to which we’ve connected - in this case, it should be fruits.
 // in terminal running nodemon, you should now see two messages of connection with port 3000 and connected to mongoose
 
-// import the  newly created fruit model
+// import the newly created fruit model
 const Fruit = require("./models/fruit.js");
 // With this addition, we’re ready to use our Fruit model in the request handling functions defined in our express routes. This setup will allow us to perform database operations like creating, reading, updating, and deleting fruit documents in MongoDB.
+
+// This middleware parses incoming request bodies, extracting form data and converting it into a JavaScript object. It then attaches this object to the req.body property of the request, making the form data easily accessible within our route handlers.
+// this should be after the imported Fruit model (line 23)
+app.use(express.urlencoded({ extended: false }));
+// this is created after we made the submit form for new foods and before defining teh post route
+
+
 
 // build the route and create a landing page
 app.get("/", async (req, res) => {
@@ -109,15 +116,7 @@ app.get("/fruits/:fruitId", async (req, res) => {
 
 
 
-
-
-
-
-
-// This middleware parses incoming request bodies, extracting form data and converting it into a JavaScript object. It then attaches this object to the req.body property of the request, making the form data easily accessible within our route handlers.
-app.use(express.urlencoded({ extended: false }));
-
-// define the route
+// define the post oute
 // Let’s start by defining and testing our route. Add the following code to server.js, beneath the new route:
 // POST /fruits
 app.post("/fruits", async (req, res) => {
@@ -126,13 +125,16 @@ app.post("/fruits", async (req, res) => {
   } else {
     req.body.isReadyToEat = false;
   }
+  // in the code snippet above, we have to do a little bit of data manipulation before our new fruit is ready to be sent to the database. The if statement checks the value of req.body.isReadyToEat. This field comes from a checkbox in our form. In web forms, a checked checkbox sends the value "on", while an unchecked checkbox sends no value (thus, it’s undefined). We convert this “on” or undefined value to a Boolean (true or false) to match our schema’s expected data type for isReadyToEat.
+
   // req.body.isReadyToEat = !!req.body.isReadyToEat; this is clever way to rewrite the above if else. the double negative !! converts it to a boolean value
   // req.body.isReadyToEat = req.body.isReadyToEat ? true : false using ternary
 
   // console.log(req.body);
   await Fruit.create(req.body); // add to database collection on mongodb
+  // we use Fruit.create(req.body) to add a new fruit to our database. req.body contains the form data sent by the user, which now includes our corrected isReadyToEat value. Fruit.create() is an asynchronous operation; we use await to ensure the database operation completes before the function continues.
   //   res.redirect("/fruits/new"); first old redirect
-  res.redirect("/fruits"); // once data is added then it redirects back to form,then we changed and redirected to index fruits to see the new changes
+  res.redirect("/fruits"); // once data is added then it redirects back to form,then we changed and redirected to index fruits to see the new changes and submissions
   //   Next, we use Fruit.create(req.body) to add a new fruit to our database. req.body contains the form data sent by the user, which now includes our corrected isReadyToEat value. Fruit.create() is an asynchronous operation; we use await to ensure the database operation completes before the function continues.
 
   // Finally, we redirect the user back to the form page using res.redirect("/fruits/new"). This is a common practice after processing form data to prevent users from accidentally submitting the form multiple times by refreshing the page.
@@ -159,6 +161,8 @@ app.get("/fruits", async (req, res) => {
       // now i can access the the fruits through this fruits key in index.ejs
     // console.log(allFruits); // this logs all data that was posted to the terminal to test
     // res.send("Welcome to the index page!"); only to test route
+    // The second argument is an object containing the data we want to pass to the template. This data is provided as key/value pairs, where the key is the name we’ll use to reference the data in our EJS template.
+    // By passing { fruits: allFruits }, we made the allFruits array accessible in our EJS file as a variable named fruits
 
 });
 
