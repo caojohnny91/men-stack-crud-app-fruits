@@ -6,19 +6,23 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Fruits Index</title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
   </head>
 
-  <body>
-      <h1>All Fruits</h1>
-      <ul>
-          <% fruits.forEach(fruit => { %>
-            <li>
-                <a href="/fruits/<%= fruit._id %>"> <%= fruit.name %> </a>
-            </li>
-            <% }); %>
-        </ul>
-        <a href="/fruits/new">Add New Fruit</a>
-  </body>
+<body>
+  <div class="index-header-div">
+  <h1>All Fruits</h1>
+</div>
+<ul>
+  <% fruits.forEach(fruit => { %>
+    <li>
+      <a class="fruit-cards" href="/fruits/<%= fruit._id %>"> <%= fruit.name %> </a>
+    </li>
+    <% }); %>
+  </ul>
+  
+  <a class="add-fruit" href="/fruits/new">Add fruit</a>
+</body>
 </html>
 
 <!-- 
@@ -28,7 +32,7 @@ We can list our fruits in a simple, bulleted list format using an unordered list
 
 a href creates a link and then you can direct it on where to go
 
-To make each fruit name a clickable link, we’ll wrap the <%= fruit.name %> with an <a> tag. The href attribute of each link will point to the show route of the corresponding fruit. We’ll use the fruit’s ID to build this URL.
+To make each fruit name a clickable link, we’ll wrap the  fruit.name  with an <a> tag. The href attribute of each link will point to the show route of the corresponding fruit. We’ll use the fruit’s ID to build this URL.
 
 Utilizing _id will give us the id that we need. Now we can make the adjustment to the <a> tag and add a dynamic href
 

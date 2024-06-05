@@ -7,8 +7,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title><%= fruit.name %></title>
     <!-- Dynamic title based on fruit name -->
+    <link rel="stylesheet" href="/stylesheets/style.css" />
   </head>
   <body>
+
+    <div class="fruit-details">
     <h1><%= fruit.name %></h1>
     <!-- Conditional rendering based on fruit's readiness -->
     <% if (fruit.isReadyToEat) { %>
@@ -16,10 +19,31 @@
     <% } else { %>
     <p>This fruit is not ready to eat! :(</p>
     <% } %>
-  </body>
-  <a href="/fruits/">Back to Fruits</a>
-</html>
+    </div>
 
+    <div class="fruit-actions">
+          <!-- new delete button -->
+      <form
+        class="delete-form"
+        action="/fruits/<%=fruit._id%>?_method=DELETE"
+        method="POST"
+      >
+        <button class="delete-button" type="submit">
+          Delete <%= fruit.name %>
+        </button>
+      </form>
+          <!-- add edit page link here -->
+      <a class="edit-link" href="/fruits/<%= fruit._id %>/edit">
+        <div class="edit-text">Edit <%= fruit.name %></div>
+      </a>
+    </div>
+
+    <a class="fruits-index-link" href="/fruits">
+      <div class="index-link-text">Back to Fruits</div>
+    </a>
+  </div>
+  </body>
+</html>
 
 <!-- 
     The show route is designed to display detailed information about a specific item, such as a specific fruit in our application. In keeping with RESTful routing conventions, the url for this route will be: /fruits/:id
@@ -34,23 +58,24 @@ Let’s enhance our application to show detailed information about each fruit. W
 To enhance our fruit details page, we’ll incorporate conditional rendering based on the fruit’s isReadyToEat property. This will display different messages depending on whether the fruit is ready to eat or not.
 
 We’ll use EJS control flow to dynamically display a message about the fruit’s readiness. Insert an if/else statement in the HTML body, right after the <h1> tag:
-    
 
 
+  DELETE ROUTE
+    All we’ve added here is a <form> with a single button in it. This button, when clicked, sends a request to the server to delete a particular fruit.
+
+Form Action and Method:
+
+The action attribute in the form is set to the URL /fruits/<fruit._id>, where <fruit._id> dynamically inserts the ID of the current fruit. This tells the form where to send the request.
+
+Normally, forms only support GET or POST methods, but we want to send a DELETE request. To achieve this, we use a query parameter ?_method=DELETE in the action URL. This tricks our server into treating the POST request as a DELETE request, thanks to the method-override middleware we set up in server.js.
+
+The form doesn’t have any input fields because we only need the fruit’s ID to delete it, which is already included in the form’s action URL.
 
 
+EDIT ROUTE
+Link to the edit page
+To provide a way for users to navigate to the edit page of a specific fruit, we’ll add a link on the show page. This link will be placed right after the delete button and before the link that takes the user back to the main fruit list.
 
-
-
-
-
-
-
-
-
-
-
-
-
+In this code, we’re dynamically generating the href attribute of the “Edit” link by inserting the unique _id of the fruit. This ensures that the link leads to the correct edit page for each specific fruit.
 
  -->

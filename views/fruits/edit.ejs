@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit <%= fruit.name %> </title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+  </head>
+  <body>
+    <!-- update the header -->
+    <h1>Edit <%= fruit.name %></h1>
+<!-- updated form -->
+
+<form action="/fruits/<%=fruit._id%>?_method=PUT" method="POST">
+    <label for="name">Name:</label>
+    <input type="text" name="name" value="<%= fruit.name %>" />
+  
+    <div class="checkbox-div">
+        <label for="ready-to-eat">Ready to Eat?</label>
+        <input type="checkbox" name="isReadyToEat" id="ready-to-eat" <% if (fruit.isReadyToEat) { %>checked<% } %> >
+    </div>
+        
+    <button type="submit">Update Fruit</button>
+  </form>
+  
+  <a class="fruits-index-link" href="/fruits">
+    <div class="index-link-text">Back to Fruits</div>
+  </a>
+  </body>
+</html>
+
+
+
+  <!-- 
+The Edit form needs to make a PUT request to /fruits/:fruitID in the same way that the New form needs to make a POST request to /fruits.
+
+Remember, that browsers don’t support PUT requests, so we will use the same method-override middleware as we did with the delete route. We’ll append ?_method=PUT to the end of our action URL:
+
+Prefill form data
+To improve user experience in our fruit editing form, we’ll prefill the form with the current data of the fruit being edited. This makes it easier for users to see and modify the existing information.
+
+Here’s how we can achieve this for both text input and checkboxes:
+For the ‘name’ input field, we’ll use the value attribute to prepopulate it with the fruit’s name:
+
+When the edit page loads, this input field will automatically display the name of the fruit being edited.
+
+Checkboxes work differently. The checkbox for isReadyToEat will be checked based on whether the fruit is ready to eat or not. A checkbox input can have a checked attribute, which, if present, makes the checkbox checked by default.
+
+Unchecked by default:
+<input type="checkbox" name="isReadyToEat" />
+
+Checked by default:
+<input type="checkbox" name="isReadyToEat" checked />
+
+To conditionally render the checked attribute based on the fruit.isReadyToEat value, we’ll use EJS control flow logic in the checkbox input:
+<input type="checkbox" name="isReadyToEat" < % if (fruit.isReadyToEat) { %>checked< % } % > >
+
+This setup ensures that the checkbox reflects the current state of the fruit. If fruit.isReadyToEat is true, the checked attribute is added, and the checkbox will be checked when the page loads. Otherwise, it remains unchecked.
+
+   -->
