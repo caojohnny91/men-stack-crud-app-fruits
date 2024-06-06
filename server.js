@@ -27,6 +27,7 @@ mongoose.connection.on("connected", () => {
 
 // import the newly created fruit model
 const Fruit = require("./models/fruit.js");
+const { log } = require("console");
 // With this addition, we’re ready to use our Fruit model in the request handling functions defined in our express routes. This setup will allow us to perform database operations like creating, reading, updating, and deleting fruit documents in MongoDB.
 
 
@@ -175,10 +176,14 @@ app.get("/fruits/:fruitId", async (req, res) => {
 // Lastly, let’s modify our route so that it renders views/fruits/edit.ejs, passing in the foundFruit variable we created above:
 
 app.get("/fruits/:fruitId/edit", async (req, res) => {
-  const foundFruit = await Fruit.findById(req.params.fruitId);
-  res.render("fruits/edit.ejs", {
-    fruit: foundFruit,
-  });
+  try{
+    const foundFruit = await Fruit.findById(req.params.fruitId);
+    res.render("fruits/edit.ejs", {
+      fruit: foundFruit,
+    });
+  } catch (error) {
+    console.log("Error getting food:", error);
+  }
 });
 
 
@@ -188,6 +193,7 @@ app.get("/fruits/:fruitId/edit", async (req, res) => {
 // Let’s start by defining and testing our route. Add the following code to server.js, beneath the new route:
 // POST /fruits
 app.post("/fruits", async (req, res) => {
+  try {
   if (req.body.isReadyToEat === "on") {
     req.body.isReadyToEat = true;
   } else {
@@ -207,6 +213,9 @@ app.post("/fruits", async (req, res) => {
 
   // Finally, we redirect the user back to the form page using res.redirect("/fruits/new"). This is a common practice after processing form data to prevent users from accidentally submitting the form multiple times by refreshing the page.
   // can verify if data was saved by navigating to mongoDB
+} catch (error) {
+  console.log("Error creating food:", error);
+}
 });
 
 //   In the browser, enter some data and submit the form on the /fruits/new page. You’ll instantly be redirected back to /fruits/new, but if you check your terminal, you should see a JS object representation of the form data you just submitted.
@@ -229,7 +238,7 @@ app.post("/fruits", async (req, res) => {
 // In this route, we will employ the Mongoose findByIdAndUpdate() method. This method allows us to update a specific document in the MongoDB database based on its unique ID. Since this is an asynchronous operation, we’ll utilize async/await to ensure the operation completes before proceeding.
 
 app.put("/fruits/:fruitId", async (req, res) => { // /fruits/:fruitId is URL path that makes it available in the req obj req.params.fruitId
-  
+  try {
   // Handle the 'isReadyToEat' checkbox data
   if (req.body.isReadyToEat === "on") {
     req.body.isReadyToEat = true;
@@ -242,6 +251,9 @@ app.put("/fruits/:fruitId", async (req, res) => { // /fruits/:fruitId is URL pat
 
   // Redirect to the fruit's show page to see the updates
   res.redirect(`/fruits/${req.params.fruitId}`);
+} catch (error) {
+  console.log("Error updating fruit:", error);
+}
 });
 
 
@@ -250,9 +262,13 @@ app.put("/fruits/:fruitId", async (req, res) => { // /fruits/:fruitId is URL pat
 // This route uses app.delete to listen for delete requests. When a delete request is made to /fruits/:fruitId, it will respond with a message saying “This is the delete route”. This step ensures that the delete route is being accessed correctly when the delete button is clicked.
 
 app.delete("/fruits/:fruitId", async (req, res) => {
-  // res.send('This is the delete route'); TESTING
-  await Fruit.findByIdAndDelete(req.params.fruitId);
-  res.redirect("/fruits"); // After deleting the fruit, we will redirects the user back to the index page /fruits, where the deleted fruit will no longer be listed.
+  try {
+    // res.send('This is the delete route'); TESTING
+    await Fruit.findByIdAndDelete(req.params.fruitId);
+    res.redirect("/fruits"); // After deleting the fruit, we will redirects the user back to the index page /fruits, where the deleted fruit will no longer be listed.
+ } catch (error) {
+  console.log("Error deleting fruit:", error);
+}
 });
 
 app.listen(3000, function () {
