@@ -11,7 +11,7 @@
     <h1>Edit <%= fruit.name %></h1>
 <!-- updated form -->
 
-<form action="/fruits/<%=fruit._id%>?_method=PUT" method="POST">
+<form action="/fruits/<%=fruit._id%>?_method=PUT" method="POST" onsubmit="return confirm('Are you sure that you want to edit <%= fruit.name %>?');">
     <label for="name">Name:</label>
     <input type="text" name="name" value="<%= fruit.name %>" />
   
@@ -22,7 +22,7 @@
         
     <button type="submit">Update Fruit</button>
   </form>
-  
+
   <a class="fruits-index-link" href="/fruits">
     <div class="index-link-text">Back to Fruits</div>
   </a>

@@ -228,7 +228,8 @@ app.post("/fruits", async (req, res) => {
 
 // In this route, we will employ the Mongoose findByIdAndUpdate() method. This method allows us to update a specific document in the MongoDB database based on its unique ID. Since this is an asynchronous operation, we’ll utilize async/await to ensure the operation completes before proceeding.
 
-app.put("/fruits/:fruitId", async (req, res) => {
+app.put("/fruits/:fruitId", async (req, res) => { // /fruits/:fruitId is URL path that makes it available in the req obj req.params.fruitId
+  
   // Handle the 'isReadyToEat' checkbox data
   if (req.body.isReadyToEat === "on") {
     req.body.isReadyToEat = true;
@@ -249,6 +250,7 @@ app.put("/fruits/:fruitId", async (req, res) => {
 // This route uses app.delete to listen for delete requests. When a delete request is made to /fruits/:fruitId, it will respond with a message saying “This is the delete route”. This step ensures that the delete route is being accessed correctly when the delete button is clicked.
 
 app.delete("/fruits/:fruitId", async (req, res) => {
+  // res.send('This is the delete route'); TESTING
   await Fruit.findByIdAndDelete(req.params.fruitId);
   res.redirect("/fruits"); // After deleting the fruit, we will redirects the user back to the index page /fruits, where the deleted fruit will no longer be listed.
 });
